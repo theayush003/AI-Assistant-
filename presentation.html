@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Assistant Development - PowerPoint Presentation</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: #2c3e50;
+            color: #ecf0f1;
+            overflow: hidden;
+            height: 100vh;
+        }
+        
+        .presentation-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            width: 100vw;
+        }
+        
+        .slide-container {
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .slides {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+            height: 100%;
+            width: 100%;
+        }
+        
+        .slide {
+            min-width: 100vw;
+            height: 100%;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            overflow-y: auto;
+        }
+        
+        .slide-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            width: 90%;
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            color: #3498db;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 25px;
+            color: #3498db;
+        }
+        
+        h3 {
+            font-size: 1.8rem;
+            margin: 15px 0;
+            color: #2ecc71;
+        }
+        
+        p {
+            font-size: 1.4rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        ul {
+            margin-left: 30px;
+            margin-bottom: 25px;
+        }
+        
+        li {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        
+        .code-block {
+            background: #34495e;
+            border-left: 5px solid #3498db;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.2rem;
+            line-height: 1.5;
+        }
+        
+        .highlight {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+        }
+        
+        .nav-btn {
+            background: rgba(52, 152, 219, 0.7);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: background 0.3s;
+        }
+        
+        .nav-btn:hover {
+            background: rgba(52, 152, 219, 1);
+        }
+        
+        .slide-indicators {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .indicator {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .indicator.active {
+            background: rgba(255, 255, 255, 0.9);
+        }
+        
+        .title-slide {
+            text-align: center;
+            background: linear-gradient(135deg, #2c3e50, #4a69bd);
+        }
+        
+        .title-slide h1 {
+            font-size: 4rem;
+            margin-bottom: 30px;
+        }
+        
+        .title-slide p {
+            font-size: 1.8rem;
+            color: #ecf0f1;
+        }
+        
+        .agenda-slide ul {
+            columns: 2;
+            column-gap: 40px;
+        }
+        
+        .feature {
+            background: rgba(52, 152, 219, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 5px solid #2ecc71;
+        }
+        
+        .prompt-example {
+            background: rgba(46, 204, 113, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 5px solid #2ecc71;
+        }
+        
+        .conclusion-slide {
+            text-align: center;
+            background: linear-gradient(135deg, #2c3e50, #1e3799);
+        }
+        
+        .thank-you {
+            font-size: 3rem;
+            color: #2ecc71;
+            margin-bottom: 30px;
+        }
+        
+        .footer {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            h2 {
+                font-size: 2rem;
+            }
+            
+            p, li {
+                font-size: 1.2rem;
+            }
+            
+            .nav-btn {
+                padding: 10px 15px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <div class="slide-container">
+            <div class="slides">
+                <!-- Slide 1: Title Slide -->
+                <div class="slide title-slide">
+                    <div class="slide-content">
+                        <h1>AI Assistant Development</h1>
+                        <p>A Project in Prompt Engineering</p>
+                        <p>Creating an Intelligent Assistant with Web Technologies</p>
+                        <div class="footer">
+                            <p>Prompt Engineering Course Project</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Slide 2: Project Overview -->
+                <div class="slide">
+                    <div class="slide-content">
+                        <h2>Project Overview</h2>
+                        <p>This project involves designing and implementing a basic AI Assistant that can perform a variety of tasks based on user prompts.</p>
+                        
+                        <div class="feature">
+                            <h3>Objective</h3>
+                            <p>Showcase skills in crafting effective prompts and understanding how different prompts can drive various responses from an AI model.</p>
+                        </div>
+                        
+                        <div class="feature">
+                            <h3>Project Type</h3>
+                            <p>Web-based AI Assistant capable of performing multiple intelligent tasks based on user input.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Slide 3: Key Requirements -->
+                <div class="slide">
+                    <div class="slide-content">
+                        <h2>Key Requirements</h2>
+                        
+                        <ul>
+                            <li><span class="highlight">Functionality:</span> Perform at least three distinct functions</li>
+                            <li><span class="highlight">Prompt Design:</span> Create multiple prompts for each function</li>
+                            <li><span class="highlight">User Interaction:</span> Implement user-friendly interface</li>
+                            <li><span class="highlight">Feedback Loop:</span> Include user feedback mechanism</li>
+                            <li><span class="highlight">Documentation:</span> Provide clear user guide</li>
+                        </ul>
+                        
+                        <div class="prompt-example">
+                            <p>The assistant should be able to handle different types of requests with appropriate responses.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Slide 4: Functionality -->
+                <div class="slide">
+                    <div class="slide-content">
+                        <h2>Core Functionality</h2>
+                        
+                        <div class="feature">
+                            <h3>1. Answering Questions</h3>
+                            <p>Responding to factual queries with accurate information</p>
+                            <div class="code-block">
+                                // Example: "What is the capital of France?"<br>
+                                // Response: "The capital of France is Paris."
+                            </div>
+                        </div>
+                        
+                        <div class="feature">
+                            <h3>2. Text Summarization</h3>
+                            <p>Condensing longer texts into concise summaries</p>
+                            <div class="code-block">
+                                // Example: "Summarize this article about climate change..."<br>
+                                // Response: Provides a brief overview of key points
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Slide 5: More Functionality -->
+                <div class="slide">
+                    <div class="slide-content">
+                        <h2>Additional Functionality</h2>
+                        
+                        <div class="feature">
+                            <h3>3. Content Generation</h3>
+                            <p>Creating original content like stories, poems, or essays</p>
+                            <div class="code-block">
+                                // Example: "Write a short story about a dragon"<br>
+                                // Response: Generates a creative story about dragons
+                            </div>
+                        </div>
+                        
+                        <div class="feature">
+                            <h3>4. Providing Advice</h3>
+                            <p>Offering suggestions on specific topics</p>
+                            <div class="code-block">
+                                // Example: "How can I improve my study habits?"<br>
+                                // Response: Provides practical study tips and strategies
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Slide 6: Prompt Design -->
+                <div class="slide">
+                    <div class="slide-content">
+                        <h2>Prompt Design Strategies</h2>
+                        
+                        <p>For each function, multiple prompts are designed to effectively guide the AI:</p>
+                        
+                        <ul>
+                            <li><span class="highlight">Varying length and specificity:</span> From concise to detailed prompts</li>
+                            <li><span class="highlight">Different tones and styles:</span> Formal, casual, instructional, etc.</li>
+                            <li><span class="highlight">Complexity and context:</span> Simple queries vs. multi-part requests</li>
+                        </ul>
+                        
+                        <div class="prompt-example">
+                            <p>Example for question answering:</p>
+                            <p>"What is Python?"</p>
+                            <p>"Can you explain what Python programming language is used for?"</p>
+                            <p>"Provide a detailed overview of Python, including its key features and common applications."</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Slide 7: User Interface -->
+                <div class="slide">
+                    <div class="slide-content">
+                        <h2>User Interface Design</h2>
+                        
+                        <p>The AI Assistant features a clean, intuitive web interface with:</p>
+                        
+                        <ul>
+                            <li>Function selection buttons</li>
+                            <li>Text input area for queries</li>
+                            <li>Clear response display area</li>
+                            <li>Feedback mechanism</li>
+                            <li>Visual styling for enhanced user experience</li>
+                        </ul>
+                        
+                        <div class="code-block">
+                            // Web Technologies Used:<br>
+                            HTML5, CSS3, JavaScript<br>
+                            Responsive design principles<br>
+                            Modern UI with gradient backgrounds
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Slide 8: Feedback Mechanism -->
+                <div class="slide">
+                    <div class="slide-content">
+                        <h2>Feedback Loop Implementation</h2>
+                        
+                        <p>The assistant includes a mechanism for users to provide feedback on responses:</p>
+                        
+                        <div class="feature">
+                            <h3>Feedback Options</h3>
+                            <p>"Was this response helpful? (Yes/No)"</p>
+                        </div>
+                        
+                        <div class="feature">
+                            <h3>Purpose</h3>
+                            <p>Collect user feedback to refine prompt design and improve AI responses over time</p>
+                        </div>
+                        
+                        <div class="code-block">
+                            // Feedback tracking example:<br>
+                            let feedbackCount = { helpful: 0, notHelpful: 0 };<br>
+                            // Update counts based on user input
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Slide 9: Technical Implementation -->
+                <div class="slide">
+                    <div class="slide-content">
+                        <h2>Technical Implementation</h2>
+                        
+                        <p>The project is implemented as a web application with simulated AI responses:</p>
+                        
+                        <div class="code-block">
+                            // Core structure<br>
+                            HTML: Page structure and content<br>
+                            CSS: Styling and responsive design<br>
+                            JavaScript: Logic and interaction
+                        </div>
+                        
+                        <div class="feature">
+                            <h3>Simulated AI Responses</h3>
+                            <p>Since direct API access isn't available in this environment, the AI responses are simulated using predefined logic and pattern matching.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Slide 10: Conclusion -->
+                <div class="slide conclusion-slide">
+                    <div class="slide-content">
+                        <div class="thank-you">Thank You!</div>
+                        <p>This project demonstrates the principles of prompt engineering and AI assistant development</p>
+                        <p>It showcases how carefully designed prompts can elicit specific responses from AI models</p>
+                        
+                        <div class="footer">
+                            <p>AI Assistant Development Project - Prompt Engineering Course</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="nav-buttons">
+            <button class="nav-btn" id="prev-btn"><i class="fas fa-arrow-left"></i> Previous</button>
+            <button class="nav-btn" id="next-btn">Next <i class="fas fa-arrow-right"></i></button>
+        </div>
+        
+        <div class="slide-indicators">
+            <!-- Indicators will be added by JavaScript -->
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const slides = document.querySelector('.slides');
+            const slideCount = document.querySelectorAll('.slide').length;
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const indicatorsContainer = document.querySelector('.slide-indicators');
+            
+            let currentSlide = 0;
+            
+            // Create indicators
+            for (let i = 0; i < slideCount; i++) {
+                const indicator = document.createElement('div');
+                indicator.classList.add('indicator');
+                if (i === 0) indicator.classList.add('active');
+                indicator.setAttribute('data-index', i);
+                indicator.addEventListener('click', function() {
+                    goToSlide(parseInt(this.getAttribute('data-index')));
+                });
+                indicatorsContainer.appendChild(indicator);
+            }
+            
+            // Update slides and indicators
+            function updateSlide() {
+                slides.style.transform = `translateX(-${currentSlide * 100}vw)`;
+                
+                // Update indicators
+                document.querySelectorAll('.indicator').forEach((ind, index) => {
+                    if (index === currentSlide) {
+                        ind.classList.add('active');
+                    } else {
+                        ind.classList.remove('active');
+                    }
+                });
+            }
+            
+            // Go to specific slide
+            function goToSlide(n) {
+                currentSlide = n;
+                if (currentSlide < 0) currentSlide = 0;
+                if (currentSlide >= slideCount) currentSlide = slideCount - 1;
+                updateSlide();
+            }
+            
+            // Event listeners for navigation
+            prevBtn.addEventListener('click', function() {
+                goToSlide(currentSlide - 1);
+            });
+            
+            nextBtn.addEventListener('click', function() {
+                goToSlide(currentSlide + 1);
+            });
+            
+            // Keyboard navigation
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'ArrowLeft') {
+                    goToSlide(currentSlide - 1);
+                } else if (e.key === 'ArrowRight') {
+                    goToSlide(currentSlide + 1);
+                }
+            });
+            
+            // Touch swipe support for mobile devices
+            let touchStartX = 0;
+            let touchEndX = 0;
+            
+            document.querySelector('.slide-container').addEventListener('touchstart', function(e) {
+                touchStartX = e.changedTouches[0].screenX;
+            });
+            
+            document.querySelector('.slide-container').addEventListener('touchend', function(e) {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+            });
+            
+            function handleSwipe() {
+                if (touchEndX < touchStartX - 50) {
+                    // Swipe left - next slide
+                    goToSlide(currentSlide + 1);
+                } else if (touchEndX > touchStartX + 50) {
+                    // Swipe right - previous slide
+                    goToSlide(currentSlide - 1);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
