@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Assistant</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+        }
+        
+        header {
+            background: #6e8efb;
+            color: white;
+            text-align: center;
+            padding: 25px 20px;
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        
+        .main-content {
+            padding: 25px;
+        }
+        
+        .function-selector {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .function-btn {
+            padding: 15px;
+            background: #f0f4ff;
+            border: 2px solid #6e8efb;
+            border-radius: 10px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+        
+        .function-btn:hover {
+            background: #6e8efb;
+            color: white;
+            transform: translateY(-3px);
+        }
+        
+        .function-btn.active {
+            background: #6e8efb;
+            color: white;
+        }
+        
+        .input-area {
+            margin-bottom: 20px;
+        }
+        
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            resize: vertical;
+            min-height: 120px;
+            font-size: 1rem;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: #6e8efb;
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 25px;
+        }
+        
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        #submit-btn {
+            background: #6e8efb;
+            color: white;
+        }
+        
+        #submit-btn:hover {
+            background: #5a7de3;
+        }
+        
+        #clear-btn {
+            background: #f0f4ff;
+            color: #6e8efb;
+        }
+        
+        #clear-btn:hover {
+            background: #e0e6ff;
+        }
+        
+        .response-area {
+            background: #f9faff;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #e0e6ff;
+            min-height: 200px;
+            margin-bottom: 20px;
+        }
+        
+        .response-area h3 {
+            color: #6e8efb;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e0e6ff;
+        }
+        
+        #response-content {
+            line-height: 1.6;
+        }
+        
+        .feedback-area {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .feedback-area p {
+            font-weight: 600;
+        }
+        
+        .feedback-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .feedback-btn {
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        #helpful-btn {
+            background: #4caf50;
+            color: white;
+        }
+        
+        #not-helpful-btn {
+            background: #f44336;
+            color: white;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #f0f4ff;
+            color: #6e8efb;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .function-selector {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>AI Assistant</h1>
+            <p class="subtitle">Your personal assistant for answering questions, summarizing text, and generating creative content</p>
+        </header>
+        
+        <div class="main-content">
+            <div class="function-selector">
+                <div class="function-btn active" data-function="answer">Answer Questions</div>
+                <div class="function-btn" data-function="summarize">Summarize Text</div>
+                <div class="function-btn" data-function="generate">Generate Content</div>
+            </div>
+            
+            <div class="input-area">
+                <textarea id="user-input" placeholder="Enter your question, text to summarize, or topic for content generation..."></textarea>
+            </div>
+            
+            <div class="action-buttons">
+                <button id="submit-btn">Process Request</button>
+                <button id="clear-btn">Clear</button>
+            </div>
+            
+            <div class="response-area">
+                <h3>AI Response</h3>
+                <div id="response-content">Your response will appear here...</div>
+            </div>
+            
+            <div class="feedback-area">
+                <p>Was this response helpful?</p>
+                <div class="feedback-buttons">
+                    <button id="helpful-btn" class="feedback-btn">Yes</button>
+                    <button id="not-helpful-btn" class="feedback-btn">No</button>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>AI Assistant Project - Prompt Engineering</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const functionBtns = document.querySelectorAll('.function-btn');
+            const userInput = document.getElementById('user-input');
+            const submitBtn = document.getElementById('submit-btn');
+            const clearBtn = document.getElementById('clear-btn');
+            const responseContent = document.getElementById('response-content');
+            const helpfulBtn = document.getElementById('helpful-btn');
+            const notHelpfulBtn = document.getElementById('not-helpful-btn');
+            
+            let currentFunction = 'answer';
+            let feedbackCount = { helpful: 0, notHelpful: 0 };
+            
+            // Function selection
+            functionBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    functionBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentFunction = this.getAttribute('data-function');
+                    
+                    // Update placeholder based on selection
+                    switch(currentFunction) {
+                        case 'answer':
+                            userInput.placeholder = 'Enter your question...';
+                            break;
+                        case 'summarize':
+                            userInput.placeholder = 'Paste the text you want to summarize...';
+                            break;
+                        case 'generate':
+                            userInput.placeholder = 'Enter a topic or idea for content generation...';
+                            break;
+                    }
+                });
+            });
+            
+            // Process the request
+            submitBtn.addEventListener('click', function() {
+                const inputText = userInput.value.trim();
+                
+                if (!inputText) {
+                    responseContent.innerHTML = '<p class="error">Please enter some text first.</p>';
+                    return;
+                }
+                
+                // Simulate AI processing
+                responseContent.innerHTML = '<p class="thinking">Thinking...</p>';
+                
+                setTimeout(() => {
+                    let response = '';
+                    
+                    switch(currentFunction) {
+                        case 'answer':
+                            response = generateAnswer(inputText);
+                            break;
+                        case 'summarize':
+                            response = generateSummary(inputText);
+                            break;
+                        case 'generate':
+                            response = generateContent(inputText);
+                            break;
+                    }
+                    
+                    responseContent.innerHTML = response;
+                }, 1000);
+            });
+            
+            // Clear input and response
+            clearBtn.addEventListener('click', function() {
+                userInput.value = '';
+                responseContent.innerHTML = 'Your response will appear here...';
+            });
+            
+            // Feedback mechanism
+            helpfulBtn.addEventListener('click', function() {
+                feedbackCount.helpful++;
+                alert('Thank you for your feedback! Helpful: ' + feedbackCount.helpful + ', Not Helpful: ' + feedbackCount.notHelpful);
+            });
+            
+            notHelpfulBtn.addEventListener('click', function() {
+                feedbackCount.notHelpful++;
+                alert('Thank you for your feedback. We will improve. Helpful: ' + feedbackCount.helpful + ', Not Helpful: ' + feedbackCount.notHelpful);
+            });
+            
+            // Simulated AI functions
+            function generateAnswer(question) {
+                const answers = {
+                    "capital of france": "The capital of France is Paris.",
+                    "python programming": "Python is a high-level, interpreted programming language known for its readability and versatility.",
+                    "machine learning": "Machine learning is a subset of artificial intelligence that focuses on building systems that learn from data.",
+                    "what is prompt engineering": "Prompt engineering is the process of designing and optimizing prompts to effectively use AI models for specific tasks.",
+                    "how to learn web development": "Start with HTML, CSS, and JavaScript. Practice by building projects and explore frameworks like React or Vue.",
+                    "what is the meaning of life": "That's a deep philosophical question. Many believe it's about finding purpose, happiness, and making a positive impact."
+                };
+                
+                const lowerQuestion = question.toLowerCase();
+                
+                for (const [key, value] of Object.entries(answers)) {
+                    if (lowerQuestion.includes(key)) {
+                        return `<p>${value}</p>`;
+                    }
+                }
+                
+                // Default response if no specific answer is found
+                return `<p>Based on your question "${question}", I can tell you that it's an interesting topic. 
+                While I don't have a specific answer in my knowledge base, I recommend consulting specialized resources 
+                or rephrasing your question for more accurate information.</p>`;
+            }
+            
+            function generateSummary(text) {
+                // Simple simulation of text summarization
+                const sentences = text.split('. ');
+                let summary = '';
+                
+                for (let i = 0; i < Math.min(3, sentences.length); i++) {
+                    if (sentences[i].length > 10) {
+                        summary += sentences[i] + '. ';
+                    }
+                }
+                
+                return `<p><strong>Summary:</strong> ${summary || 'The text is too short to generate a meaningful summary.'}</p>`;
+            }
+            
+            function generateContent(topic) {
+                const contents = {
+                    "dragon": "Once upon a time, in a land far away, there was a dragon who loved reading books instead of hoarding gold. This dragon, named Sage, would spend days in his mountain library, until one day a curious princess stumbled upon his secret.",
+                    "poem": "The leaves turn gold and red,<br>As autumn dances overhead.<br>Whispers of a winter chill,<br>As the world prepares to still.",
+                    "technology": "The future of technology lies in AI and quantum computing. These advancements will revolutionize how we process information, solve complex problems, and interact with digital systems.",
+                    "science fiction": "In the year 2150, humans have established colonies on Mars. The story follows a young engineer who discovers a mysterious alien artifact buried deep beneath the Martian surface, challenging everything we know about life in the universe."
+                };
+                
+                const lowerTopic = topic.toLowerCase();
+                
+                for (const [key, value] of Object.entries(contents)) {
+                    if (lowerTopic.includes(key)) {
+                        return `<p>${value}</p>`;
+                    }
+                }
+                
+                // Default creative response
+                return `<p>Here's a creative idea about "${topic}": Imagine a world where ${topic} plays a central role in society. 
+                People have developed unique traditions and technologies around it, creating a fascinating culture that 
+                blends the familiar with the extraordinary. What challenges and opportunities might this create?</p>`;
+            }
+        });
+    </script>
+</body>
+</html>
