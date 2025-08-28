@@ -21,11 +21,12 @@ This project involves designing and implementing a basic AI Assistant that can p
 - JavaScript (ES6+)
 - Simulated AI responses (can be extended with actual API integration)
 
-Project Documentation
+## Project Documentation
+
 A PowerPoint-style presentation explaining the project is available in presentation.html. This presentation covers:
 
--Project overview and objectives
--Key requirements and functionality
--Prompt design strategies
--Technical implementation details
--User interface design
+- Project overview and objectives
+- Key requirements and functionality
+- Prompt design strategies
+- Technical implementation details
+- User interface design
